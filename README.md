@@ -27,7 +27,7 @@
 ## Homeworks 😇
 - TBD 
 
-## ~~Optional~~ must-read things
+## ~~Optional~~ Must-read things
 
 - [Multi-Task Learning Using Uncertainty to Weigh Losses for Scene Geometry and Semantics. Kendall et al. (2018)](https://arxiv.org/abs/1705.07115)
 - [Universal Language Model Fine-tuning for Text Classification. Howard et al. (2018)](https://arxiv.org/abs/1801.06146)
