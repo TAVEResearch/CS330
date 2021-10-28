@@ -5,12 +5,11 @@
 
 - [Jeiyoon Park](http://jeiyoon.github.io/), [Jieun Han](https://zeunie.notion.site/)
 
-## Materials
+## Materials: https://cs330.stanford.edu/
 
-- page: https://cs330.stanford.edu/
-- Week1: Course introduction & start of multi-task learning,  
-- Week2: 
-- Week3:
+### Week1: Course introduction & start of multi-task learning (Chelsea Finn & Karol Hausman), 
+- Week2: Supervised multi-task learning, transfer learning
+- Week3: 
 - Week4:
 
 ## ~~Optional~~ must-read things
