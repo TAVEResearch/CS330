@@ -481,14 +481,14 @@ Reserve a test set for each task!
 
 trainig 데이터가 있으면 그거에 대응하는 test set도 따로 있어야함
 
-![image-20211029104932773](C:\Users\한지은\AppData\Roaming\Typora\typora-user-images\image-20211029104932773.png)
+![image](https://user-images.githubusercontent.com/54271228/139361574-e78065e1-b824-48c9-8e9b-e2a9cbb6bf19.png)
 
 1. training, test dataset이 존재해야함
 2. training datset이 K data points와 대응
 
 3. test datset이 new set of K data points와 대응
 
-![image-20211029105211252](C:\Users\한지은\AppData\Roaming\Typora\typora-user-images\image-20211029105211252.png)
+![image](https://user-images.githubusercontent.com/54271228/139361537-a56440d8-9ce7-4f67-b94a-7984b7860d41.png)
 
 
 
