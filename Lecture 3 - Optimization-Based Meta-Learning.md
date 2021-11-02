@@ -197,5 +197,148 @@ What if we treat it as an optimization procedure?
 
 ## Optimization-Based Inference
 
-42:25
+Key idea: Acquire Φi through optimization
+
+max log p(Dtr|Φi) + log p(Φi|θ)
+
+최적화 절차!
+
+Meta-parameters serve as a prior.
+
+What form of prior?
+
+One successful form of prior knowledge: initializatin for fine-tuning
+
+
+
+##### Fine-tuning
+
+##### ![image](https://user-images.githubusercontent.com/54271228/139631516-f7926238-739c-45ae-8fc5-23f88e9e711f.png) 
+
+set initial parameters and then run gradient descent on training data for new task
+
+![image](https://user-images.githubusercontent.com/54271228/139713636-da5da3af-1942-40b1-8de3-da7a1207f56f.png)
+
+랜덤보다 original 성능이 월등히 좋음
+
+-> 먼저 meta-training data에 대해 파라미터로 사전학습을 한 후, test 할때, 내 데이터셋으로 fine-tune 진행
+
+Where do you get the pre-trained parameters? 
+
+- ImageNet classification 
+- Models trained on large language corpora (BERT, LMs) 
+- Other unsupervised learning techniques 
+- Whatever large, diverse dataset you might have
+
+
+
+Some common practices 
+
+- Fine-tune with a smaller learning rate 
+- Lower learning rate for lower layers 
+- Freeze earlier layers, gradually unfreeze 
+- Reinitialize last layer 
+- Search over hyperparameters via cross-val 
+- Architecture choices matter (e.g. ResNets)
+
+![image](https://user-images.githubusercontent.com/54271228/139714740-cbf10dbe-7701-4df7-9c03-e612c59cd459.png)
+
+Fine-tuning less effective with very small datasets.
+
+
+
+![image](https://user-images.githubusercontent.com/54271228/139714931-b760bc7c-5e9f-46a8-bdf2-191852c62e93.png)
+
+그럼 적은 데이터로 fine-tuning을 효과적으로 할 수 있도록 meta-learning을 사용하면 어떨까?
+
+fine-tuning에서 test data set에 대해 task-specific parameter가 잘 했는지 평가하고 pre-training parameter θ를 최적화함
+
+이를 모든 meta-training data set에 대해 진행하면, 적은 데이터로 fine-tuning을 효과적으로 할 수 있음
+
+Key idea: Over many tasks, learn parameter vector θ that transfers via fine-tuning
+
+![image](https://user-images.githubusercontent.com/54271228/139715445-f8799a8c-77f7-4446-8eca-8a1b0e5c5af3.png)
+
+저 빨간 원의 상태에 있을 때 gradient step을 사용해서 최적화를 시킴 
+
+meta-learning이 끝나면 저 검정 점으로 가는 것 : 3개의 task의 optimum 과 이제 유사
+
+-> Model-Agnostic Meta-Learning
+
+저 그림은 직관적이게 잘 설명하지만, misleading 할 수 있음
+
+1. 파라미터 벡터는 2차원으로 존재하지 않음
+2. 하나의 optimum이 존재하지 않음 : a whole space of optima
+
+##### General Algorithm
+
+![image](https://user-images.githubusercontent.com/54271228/139716536-ff9c6564-4440-4f87-af17-3ceb26ed4243.png)
+
+뉴럴 네트워크를 사용해서 task-specific 파라미터를 계산하는 것 대신에  한차례나 여러단계의 fine-tuning을 사용해서 계산함 
+
+이를 바탕으로 meta-parameter를 업데이트
+
+—> brings up second-order derivatives
+
+Do we need to compute the full Hessian?
+
+Do we get higher-order derivatives with more inner gradient steps?
+
+(1:00:00~1:13:00) 수학........
+
+### Optimization vs. Black-Box Adaptation
+
+![image](https://user-images.githubusercontent.com/54271228/139772202-cbbf3d2c-acf6-459c-ab03-6416b8d37433.png)
+
+Φi 는 gradient descent으로 구해짐
+
+Note: Can mix & match components of computation graph 
+
+Learn initialization but replace gradient update with learned network
+
+![image](https://user-images.githubusercontent.com/54271228/139772368-0a47895c-aa32-4c4e-93a8-fc02efdc6255.png)
+
+
+
+How well can learning procedures generalize to similar, but extrapolated tasks?
+
+![image](https://user-images.githubusercontent.com/54271228/139772434-68e61926-aa3b-4df4-9f72-97f93fd78f41.png)
+
+SNAIL, MetaNetworks: black box approach
+
+x: task variabilty
+
+y: performance
+
+meta-trained 분포(x: 중간) 와 멀어질수록 성능이 떨어짐
+
+-> 하지만 MAML은 그래도 그나마 나음 : test time에 최적화 절차(gradient descent) 를 거치기 때문
+
+-> 그에 반해, black box approach는 data set을 가지고 그냥 답을 내기 때문에, 기존 분포에 멀어진 데이터가 새로 주어졌을 때 알고리즘에서 무슨 일이 벌어지는 모름
+
+
+
+##### Does this structure come at a cost?
+
+한 차례 또는 여러 차례의 gradient step으로 어디까지 갈 수 있는가?
+
+black box approach 만큼 expressive 한가?
+
+For a sufficiently deep f, MAML function can approximate any function of training dataset and test input.
+
+-> black box approach가 할 수 있는 모든 거 가능
+
+대신 몇 가지 가정이 있음
+
+Mild Assumptions: (single gradient descent )
+
+- inner learning rate is nonzero 
+- loss function gradient does not lose information about the label 
+- datapoints in are unique
+
+Why is this interesting? 
+
+MAML has benefit of inductive bias without losing expressive power.
+
+
 
