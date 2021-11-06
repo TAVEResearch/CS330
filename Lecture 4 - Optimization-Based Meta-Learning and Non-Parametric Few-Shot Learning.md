@@ -137,4 +137,134 @@ Can we embed a learning procedure without a second-order optimization?
 
 
 
-31:00
+여태까지 배운것은 parametric model을 배움
+
+low data regime -> non-parametric method가 간단하고 잘 동작함
+
+meta-test time: few-shot learning <-> low data regime
+
+meta-training: still want to be parametric
+
+Can we use parametric meta-learners that produce effective non-parametric learners?
+
+몇몇의 non-parametric model은 parametric approaches를 넘어섰음
+
+
+
+### Non-parametric methods
+
+Key Idea: Use non-parametric learner
+
+![image](https://user-images.githubusercontent.com/54271228/140610394-e0347a78-6c86-4b51-9b18-fdf7d33efde3.png)
+
+Compare test image with training images 
+
+**In what space do you compare? With what distance metric?**
+
+-> pixel space, l^2 distance(이미지에서 성능 별로임)
+
+->Learn to compare using meta-training data!
+
+1. train Siamese network to predict whether or not two images are the same class
+
+![image](https://user-images.githubusercontent.com/54271228/140610457-c15d83ea-ddf2-4eed-8606-54790cd38196.png)
+
+-> 이미지 간의 의미적 거리를 알 수 있음
+
+meta-training dataset으로 부터 이 이미지는 다른 클래스임을 알음 ->label 0
+
+![image](https://user-images.githubusercontent.com/54271228/140610512-f4615e88-5b34-44f0-a6dc-aabae5896c52.png)
+
+같은 클래스이기 때문에 label 1
+
+meta-training dataset에서 다른 쌍의 이미지에 대해 이것을 반복하게 됨
+
+meta-training time: 뉴럴네트워크에게 같은 클래스인지 아닌지 분류시킴
+
+(pairwise comparison)
+
+meta-test time: few shot classification을 하고 싶다면 Xtest에 있는 이미지와 training set에 있는 이미지와 비교해서 가장 비슷한(확률이 제일 높은) 이미지에 레이블을 부여함
+
+Meta-training: Binary classification (두 쌍의 이미지가 같은 클래스인가?) 
+
+Meta-test: N-way classification (이 이미지가 어떤 클래스에 속해있는가?)
+
+
+
+Can we match meta-train & meta-test?  
+
+Nearest neighbors in learned embedding space
+
+![image](https://user-images.githubusercontent.com/54271228/140612957-77d52050-aa09-4fbd-9b30-903fe8f7b9cf.png)
+
+training dataset의 이미지를 learned embedding space에 넣음
+
+test query 이미지를 가지고 또 embedding space에 넣음
+
+그리고 이 임베딩을 비교해서 예측을 함
+
+검정색 점은 test embedding 과 training embedding 비교하는 것
+
+training 이미지에 대한 label을 가지고 weighed nearest neighbors를 사용해서 예측 (유사도 점수로 weighed)
+
+
+
+![image](https://user-images.githubusercontent.com/54271228/140613260-b0316ecf-dcec-4ab9-80fc-c218ea323bcd.png)
+
+What if >1 shot?
+
+Matching networks will perform comparisons **independently**
+
+
+
+Can we aggregate class information to create a prototypical embedding?
+
+![image](https://user-images.githubusercontent.com/54271228/140613346-24cc47d6-4479-447a-a682-73dbc6a351f5.png)
+
+-각 class마다 embedding space의 평균을 구함: prototypical embedding space
+
+-test image를 넣어서 prototypical class embedding과의 거리를 계산함
+
+-가장 가까운 것을 구함
+
+
+
+Challenge:
+
+What if you need to reason about more complex relationships between datapoints?
+
+![image](https://user-images.githubusercontent.com/54271228/140613613-f286d240-51a8-4a0a-9cc9-1c312c58fec7.png)
+
+
+
+## Comparison of approaches
+
+##### Computation graph perspective
+
+Black-box vs. Opmization vs. Non-Parametric
+
+![image](https://user-images.githubusercontent.com/54271228/140613696-97a16a77-4dbf-48b2-b804-415f827e8840.png)
+
+##### Algorithmic properties perspective
+
+1. Expressive power
+
+   the ability for function to represent a range of learning procedures
+
+   ->scalability, applicability to a range of domains
+
+2. Consistency
+
+   learned learning procedure will solve task with enough data
+
+   ->reduce reliance on meta-training tasks, good OOD task performance
+
+3. Uncertainty awareness
+
+   ability to reason about ambiguity during learning
+
+   ->active learning, calibrated uncertainty, RL principled Bayesian approaches
+
+![image](https://user-images.githubusercontent.com/54271228/140613902-776cf7e2-3e7d-49e6-a3eb-ca69ac4991b1.png)
+
+Generally, well-tuned versions of each perform comparably on existing few-shot benchmarks! ->Which method to use depends on your use-case.
